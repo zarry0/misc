@@ -26,11 +26,27 @@ else
     echo "Brew is not installed. Installing Brew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     check_installation_error
+    echo >> ${ZDOTDIR:-~}/.zprofile
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ${ZDOTDIR:-~}/.zprofile
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+    source ${ZDOTDIR:-~}/.zprofile
 fi
 
 # Adding x86 emulation to terminal
-echo Downloading rosetta script
+echo "Downloading rosetta script"
 curl https://raw.githubusercontent.com/zarry0/misc/refs/heads/main/setup/rosettaScript >> ${ZDOTDIR:-~}/.zshrc
+source ${ZDOTDIR:-~}/.zshrc
+
+echo "Installing Brew in rosetta terminal"
+izsh
+if command -v brew &> /dev/null; then
+    echo "Brew is already installed."
+else
+    echo "Brew is not installed. Installing Brew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    check_installation_error
+fi
+mzsh
 
 # Install asdf 
 if command -v asdf &> /dev/null; then
@@ -58,3 +74,4 @@ done
 defaults write com.apple.dock springboard-columns -int 9
 defaults write com.apple.dock springboard-rows -int 8
 killall Dock
+
