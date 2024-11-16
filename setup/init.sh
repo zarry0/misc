@@ -48,20 +48,6 @@ else
 fi
 mzsh
 
-# Install asdf 
-if command -v asdf &> /dev/null; then
-    echo "asdf is already installed."
-else
-    echo "asdf is not installed."
-    echo "Installing asdf prerequisites..."
-    brew install coreutils curl git
-    check_installation_error
-    echo "Installing asdf..."
-    brew install asdf
-    check_installation_error
-    echo -e "\n. $(brew --prefix asdf)/libexec/asdf.sh" >> ${ZDOTDIR:-~}/.zshrc
-fi
-
 # Installing apps
 declare -a apps=("arc" "iterm2" "1password" "rectangle" "hiddenbar" "nordvpn" "notion" "the-unarchiver" "visual-studio-code" "discord")
 for i in "${apps[@]}"
