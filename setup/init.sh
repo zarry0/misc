@@ -47,10 +47,14 @@ else
 fi
 
 # Installing apps
-# app list
 declare -a apps=("arc" "iterm2" "1password" "rectangle" "hiddenbar" "nordvpn" "notion" "the-unarchiver" "visual-studio-code" "discord")
 for i in "${apps[@]}"
 do
    brew install --cask $i
    check_installation_error
 done
+
+# Change launchpad icon size
+defaults write com.apple.dock springboard-columns -int 9
+defaults write com.apple.dock springboard-rows -int 8
+killall Dock
