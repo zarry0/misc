@@ -49,7 +49,7 @@ fi
 mzsh
 
 # Installing apps
-declare -a apps=("arc" "iterm2" "1password" "rectangle" "hiddenbar" "nordvpn" "notion" "the-unarchiver" "visual-studio-code" "discord")
+declare -a apps=("arc" "iterm2" "1password" "rectangle" "hiddenbar" "nordvpn" "notion" "the-unarchiver" "visual-studio-code" "discord" "maccy" "alt-tab" "obsidian")
 for i in "${apps[@]}"
 do
    brew install --cask $i
