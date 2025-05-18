@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 
 # Function to check for errors during installation
 check_installation_error() {
@@ -56,8 +56,51 @@ do
    check_installation_error
 done
 
+# Installing packages
+declare -a pkgs=("bat" "lazygit" "tmux" "neovim" "fzf")
+for i in "${pkgs[@]}"
+do
+   brew install $i
+   check_installation_error
+done
+$(brew --prefix)/opt/fzf/install
+
+# Adding config to .zshrc
+ZSHRC="$HOME/.zshrc"
+
+append_if_missing() {
+  local line="$1"
+  local file="$2"
+  if grep -Fxq "$line" "$file"; then
+    return 1  
+  else
+    echo "$line" >> "$file"
+    return 0  
+  fi
+}
+
+echo "Adding vi mode to ~/.zshrc..."
+
+if append_if_missing "# vi mode" "$ZSHRC": then
+    echo "bindkey -v" >> "$ZSHRC"
+    echo "export KEYTIMEOUT=1" >> "$ZSHRC"
+    echo "" >> "$ZSHRC"
+fi
+
+if append_if_missing "# bat theme" "$ZSHRC"; then
+    echo 'export BAT_THEME="TwoDark"' >> "$ZSHRC"
+fi
+
+if append_if_missing "# fzf config" "$ZSHRC"; then
+    echo "[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh" >> "$ZSHRC"
+    echo "export FZF_DEFAULT_OPTS=' --height=40% --preview=\"bat --color=always {}\" --preview-window=right:60%:wrap'"
+fi
+
 # Change launchpad icon size
 defaults write com.apple.dock springboard-columns -int 9
 defaults write com.apple.dock springboard-rows -int 8
 killall Dock
+
+# source .zshrc
+source ${ZDOTDIR:-~}/.zprofile
 
